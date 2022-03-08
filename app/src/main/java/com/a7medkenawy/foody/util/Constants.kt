@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody
+package com.a7medkenawy.foody.util
 
 class Constants {
 
