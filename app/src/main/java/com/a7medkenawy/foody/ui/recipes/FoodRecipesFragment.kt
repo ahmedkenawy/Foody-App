@@ -29,10 +29,10 @@ class FoodRecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        inflater.inflate(R.layout.fragment_food_recipies, container, false)
+        mView=inflater.inflate(R.layout.fragment_food_recipies, container, false)
 
         setUpRecyclerView()
+        getResponseFromApi()
 
         return mView
     }
@@ -72,9 +72,10 @@ class FoodRecipesFragment : Fragment() {
         return queries
     }
 
-    fun setUpRecyclerView() {
+    private fun setUpRecyclerView() {
         mView.shimmer_recycler_view.adapter = mAdapter
         mView.shimmer_recycler_view.layoutManager = LinearLayoutManager(requireContext())
+        mView.shimmer_recycler_view.showShimmer()
     }
 
 
