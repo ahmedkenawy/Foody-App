@@ -37,13 +37,13 @@ class FoodRecipesFragment : Fragment() {
         return mView
     }
 
-    fun getResponseFromApi() {
+    private fun getResponseFromApi() {
         mainViewModel.setFoodRecipe(applyQueries())
         mainViewModel.recipesResult.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetWorkResult.Success -> {
                     response.data?.let {
-                        mAdapter.setData(it.results)
+                        mAdapter.setData(it)
                     }
                     hideShimmerRV()
                 }
