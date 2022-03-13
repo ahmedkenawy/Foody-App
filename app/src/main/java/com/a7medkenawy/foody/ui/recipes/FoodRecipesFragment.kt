@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a7medkenawy.foody.viewmodels.MainViewModel
 import com.a7medkenawy.foody.R
@@ -14,42 +15,77 @@ import com.a7medkenawy.foody.adapter.RecipesAdapter
 import com.a7medkenawy.foody.util.Constants
 import com.a7medkenawy.foody.util.Constants.Companion.API_KEY
 import com.a7medkenawy.foody.util.NetWorkResult
+import com.a7medkenawy.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_food_recipies.view.*
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class FoodRecipesFragment : Fragment() {
 
     private lateinit var mView: View
-    private val mAdapter by lazy { RecipesAdapter() }
-    private val mainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+    private var mAdapter: RecipesAdapter? = null
+    private var mainViewModel: MainViewModel? = null
+    private var recipesViewModel: RecipesViewModel? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        recipesViewModel = ViewModelProvider(this)[RecipesViewModel::class.java]
+        mAdapter = RecipesAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView=inflater.inflate(R.layout.fragment_food_recipies, container, false)
+        mView = inflater.inflate(R.layout.fragment_food_recipies, container, false)
 
         setUpRecyclerView()
-        getResponseFromApi()
+        readFromDatabase()
 
         return mView
     }
 
+    private fun readFromDatabase() {
+        lifecycleScope.launch {
+            mainViewModel!!.readRecipes.observe(viewLifecycleOwner, {
+                if (it.isNotEmpty()) {
+                    mAdapter!!.setData(it[0].foodRecipe)
+                    hideShimmerRV()
+                } else {
+                    getResponseFromApi()
+                }
+            })
+        }
+    }
+
+    private fun loadFromDatabase() {
+        lifecycleScope.launch {
+            mainViewModel!!.readRecipes.observe(viewLifecycleOwner, {
+                if (it.isNotEmpty()) {
+                    mAdapter!!.setData(it[0].foodRecipe)
+                    hideShimmerRV()
+                }
+            })
+        }
+    }
+
     private fun getResponseFromApi() {
-        mainViewModel.setFoodRecipe(applyQueries())
-        mainViewModel.recipesResult.observe(viewLifecycleOwner, { response ->
+        mainViewModel!!.setFoodRecipe(recipesViewModel!!.applyQueries())
+        mainViewModel!!.recipesResult.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetWorkResult.Success -> {
                     response.data?.let {
-                        mAdapter.setData(it)
+                        mAdapter!!.setData(it)
                     }
                     hideShimmerRV()
                 }
                 is NetWorkResult.Error -> {
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_LONG)
                         .show()
+                    loadFromDatabase()
                     hideShimmerRV()
                 }
                 is NetWorkResult.Loading -> {
@@ -59,18 +95,6 @@ class FoodRecipesFragment : Fragment() {
         })
     }
 
-    private fun applyQueries(): Map<String, String> {
-        val queries = HashMap<String, String>()
-
-        queries[Constants.QUERY_NUMBER] = "50"
-        queries[Constants.QUERY_API_KEY] = API_KEY
-        queries[Constants.QUERY_TYPE] = "snack"
-        queries[Constants.QUERY_DIET] = "vegan"
-        queries[Constants.QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[Constants.QUERY_FILL_INGREDIENTS] = "true"
-
-        return queries
-    }
 
     private fun setUpRecyclerView() {
         mView.shimmer_recycler_view.adapter = mAdapter

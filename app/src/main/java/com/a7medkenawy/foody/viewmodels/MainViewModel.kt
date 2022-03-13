@@ -5,10 +5,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.a7medkenawy.foody.data.Repository
+import com.a7medkenawy.foody.data.database.RecipesEntity
 import com.a7medkenawy.foody.models.FoodRecipe
 import com.a7medkenawy.foody.util.NetWorkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,15 @@ class MainViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
+    /** Room */
+    val readRecipes: LiveData<List<RecipesEntity>> =
+        repository.local.readFromDatabase().asLiveData()
 
+    fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
+        repository.local.insertRecipes(recipesEntity)
+    }
+
+    /** Retrofit */
     val recipesResult: MutableLiveData<NetWorkResult<FoodRecipe>> = MutableLiveData()
 
     fun setFoodRecipe(queries: Map<String, String>) = viewModelScope.launch {
@@ -36,6 +43,14 @@ class MainViewModel @Inject constructor(
             try {
                 val response = repository.remote.getRecipes(queries)
                 recipesResult.value = checkResponse(response)
+
+                val foodRecipe = recipesResult.value?.data
+                if (foodRecipe != null) {
+                    recipesResult.value?.data?.let {
+                        insertRecipes(RecipesEntity(it))
+                    }
+//                    insertRecipes(RecipesEntity(recipesResult.value?.data!!))
+                }
             } catch (ex: Exception) {
                 recipesResult.value = NetWorkResult.Error("Recipes Not Found.")
             }

@@ -8,10 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipesDao {
-
     @Insert
-    suspend fun insertRecipes(foodRecipe: FoodRecipe)
+    suspend fun insertRecipes(recipesEntity: RecipesEntity)
 
     @Query("select * from recipes_table order by id asc")
-    suspend fun readRecipes(): Flow<List<FoodRecipe>>
+    fun readRecipes(): Flow<List<RecipesEntity>>
 }
