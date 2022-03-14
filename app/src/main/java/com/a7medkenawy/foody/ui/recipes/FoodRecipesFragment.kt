@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.a7medkenawy.foody.viewmodels.MainViewModel
 import com.a7medkenawy.foody.R
 import com.a7medkenawy.foody.adapter.RecipesAdapter
+import com.a7medkenawy.foody.databinding.FragmentFoodRecipiesBinding
 import com.a7medkenawy.foody.util.Constants
 import com.a7medkenawy.foody.util.Constants.Companion.API_KEY
 import com.a7medkenawy.foody.util.NetWorkResult
 import com.a7medkenawy.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_food_recipies.*
 import kotlinx.android.synthetic.main.fragment_food_recipies.view.*
 import kotlinx.coroutines.launch
 
@@ -24,7 +26,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FoodRecipesFragment : Fragment() {
 
-    private lateinit var mView: View
+    private var _binding: FragmentFoodRecipiesBinding? = null
+    private val binding get() = _binding!!
+
     private var mAdapter: RecipesAdapter? = null
     private var mainViewModel: MainViewModel? = null
     private var recipesViewModel: RecipesViewModel? = null
@@ -40,12 +44,14 @@ class FoodRecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.fragment_food_recipies, container, false)
+        _binding = FragmentFoodRecipiesBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
 
         setUpRecyclerView()
         readFromDatabase()
 
-        return mView
+        return binding.root
     }
 
     private fun readFromDatabase() {
@@ -97,19 +103,23 @@ class FoodRecipesFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        mView.shimmer_recycler_view.adapter = mAdapter
-        mView.shimmer_recycler_view.layoutManager = LinearLayoutManager(requireContext())
-        mView.shimmer_recycler_view.showShimmer()
+        binding.shimmerRecyclerView.adapter = mAdapter
+        binding.shimmerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.shimmerRecyclerView.showShimmer()
     }
 
 
     private fun showShimmerRV() {
-        mView.shimmer_recycler_view.showShimmer()
+        binding.shimmerRecyclerView.showShimmer()
     }
 
     private fun hideShimmerRV() {
-        mView.shimmer_recycler_view.hideShimmer()
+        binding.shimmerRecyclerView.hideShimmer()
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
