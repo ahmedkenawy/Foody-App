@@ -8,6 +8,7 @@ import com.a7medkenawy.foody.data.database.RecipesEntity
 import com.a7medkenawy.foody.models.FoodRecipe
 import com.a7medkenawy.foody.util.NetWorkResult
 
+
 class RecipesBinding {
 
     companion object {
@@ -28,20 +29,23 @@ class RecipesBinding {
             }
         }
 
-        @BindingAdapter("readFromApi2", "readFromDatabase2", requireAll = true)
+        @BindingAdapter("readApiResponse2", "readDatabase2", requireAll = true)
         @JvmStatic
         fun errorTextViewVisibility(
             textView: TextView,
-            apiResponse: NetWorkResult<FoodRecipe>,
-            database: List<RecipesEntity>
+            apiResponse: NetWorkResult<FoodRecipe>?,
+            database: List<RecipesEntity>?
         ) {
             if (apiResponse is NetWorkResult.Error && database.isNullOrEmpty()) {
                 textView.visibility = View.VISIBLE
+                textView.text = apiResponse.message.toString()
             } else if (apiResponse is NetWorkResult.Loading) {
                 textView.visibility = View.INVISIBLE
-            } else {
+            } else if (apiResponse is NetWorkResult.Success) {
                 textView.visibility = View.INVISIBLE
             }
         }
+
+
     }
 }

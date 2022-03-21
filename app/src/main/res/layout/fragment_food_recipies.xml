@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/recipes_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -54,8 +54,6 @@
             android:layout_height="100dp"
             android:src="@drawable/ic_disconected"
             android:visibility="invisible"
-            readFromApi="@{mainViewModel.recipesResult}"
-            readFromDatabase="@{mainViewModel.readRecipes}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -68,8 +66,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            readFromApi="@{mainViewModel.recipesResult}"
-            readFromDatabase="@{mainViewModel.readRecipes}"
             android:text="@string/no_internet_connection"
             android:textStyle="bold"
             android:visibility="invisible"
