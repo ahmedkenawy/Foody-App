@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.data
+package com.a7medkenawy.foody.data.datasource.local
 
 import com.a7medkenawy.foody.data.database.RecipesDatabase
 import com.a7medkenawy.foody.data.database.RecipesEntity

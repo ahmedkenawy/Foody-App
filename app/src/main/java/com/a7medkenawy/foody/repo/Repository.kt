@@ -1,5 +1,7 @@
-package com.a7medkenawy.foody.data
+package com.a7medkenawy.foody.repo
 
+import com.a7medkenawy.foody.data.datasource.local.LocalDataSource
+import com.a7medkenawy.foody.data.datasource.remote.RemoteDataSource
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 

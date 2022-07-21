@@ -6,7 +6,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import androidx.lifecycle.*
-import com.a7medkenawy.foody.data.Repository
+import com.a7medkenawy.foody.repo.Repository
 import com.a7medkenawy.foody.data.database.RecipesEntity
 import com.a7medkenawy.foody.models.FoodRecipe
 import com.a7medkenawy.foody.util.NetWorkResult
@@ -62,7 +62,7 @@ class MainViewModel @Inject constructor(
     private fun checkResponse(response: Response<FoodRecipe>): NetWorkResult<FoodRecipe>? {
         return when {
             response.message().toString().contains("timeout") -> {
-                NetWorkResult.Error("Timeout")
+                    NetWorkResult.Error("Timeout")
             }
             response.code() == 402 -> {
                 NetWorkResult.Error("API KEY Limited.")

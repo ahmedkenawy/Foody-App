@@ -43,7 +43,7 @@ class FoodRecipesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentFoodRecipiesBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
@@ -61,31 +61,31 @@ class FoodRecipesFragment : Fragment() {
 
     private fun readFromDatabase() {
         lifecycleScope.launch {
-            mainViewModel!!.readRecipes.observe(viewLifecycleOwner, {
+            mainViewModel!!.readRecipes.observe(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     mAdapter!!.setData(it[0].foodRecipe)
                     hideShimmerRV()
                 } else {
                     getResponseFromApi()
                 }
-            })
+            }
         }
     }
 
     private fun loadFromDatabase() {
         lifecycleScope.launch {
-            mainViewModel!!.readRecipes.observe(viewLifecycleOwner, {
+            mainViewModel!!.readRecipes.observe(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     mAdapter!!.setData(it[0].foodRecipe)
                     hideShimmerRV()
                 }
-            })
+            }
         }
     }
 
     private fun getResponseFromApi() {
         mainViewModel!!.setFoodRecipe(recipesViewModel!!.applyQueries())
-        mainViewModel!!.recipesResult.observe(viewLifecycleOwner, { response ->
+        mainViewModel!!.recipesResult.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetWorkResult.Success -> {
                     response.data?.let {
@@ -103,7 +103,7 @@ class FoodRecipesFragment : Fragment() {
                     showShimmerRV()
                 }
             }
-        })
+        }
     }
 
 

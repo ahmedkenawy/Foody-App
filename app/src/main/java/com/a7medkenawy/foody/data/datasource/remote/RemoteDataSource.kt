@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.data
+package com.a7medkenawy.foody.data.datasource.remote
 
 import com.a7medkenawy.foody.data.network.FoodRecipesApi
 import com.a7medkenawy.foody.models.FoodRecipe

@@ -3,7 +3,7 @@ package com.a7medkenawy.foody.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.a7medkenawy.foody.data.DataStoreRepository
+import com.a7medkenawy.foody.repo.DataStoreRepository
 import com.a7medkenawy.foody.util.Constants
 import com.a7medkenawy.foody.util.Constants.Companion.API_KEY
 import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
@@ -17,38 +17,37 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
     application: Application,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
 ) : AndroidViewModel(application) {
 
-    var mealType = DEFAULT_MEAL_TYPE
-    var dietType = DEFAULT_DIET_TYPE
-    val readMealAndType = dataStoreRepository.readMealAndType
+    private var mealType = DEFAULT_MEAL_TYPE
+    private var dietType = DEFAULT_DIET_TYPE
 
-    fun saveMealAndType(
+
+    fun saveMealAndDietType(
         mealType: String,
         mealTypeId: Int,
         dietType: String,
-        dietTypeId: Int
-    ) {
-        viewModelScope.launch {
-            dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
-        }
+        dietTypeId: Int,
+    ) = viewModelScope.launch {
+        dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
     }
+
+    val readMealTypeAndDiet = dataStoreRepository.readMealTypeAndDiet
+
 
     fun applyQueries(): Map<String, String> {
         val queries = HashMap<String, String>()
-
         viewModelScope.launch {
-            readMealAndType.collect { value ->
+            readMealTypeAndDiet.collect { value ->
                 mealType = value.selectedMealType
-                mealType = value.selectedMealType
+                dietType = value.selectedDietType
             }
         }
-
         queries[Constants.QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
         queries[Constants.QUERY_API_KEY] = API_KEY
-        queries[Constants.QUERY_TYPE] = DEFAULT_MEAL_TYPE
-        queries[Constants.QUERY_DIET] = DEFAULT_DIET_TYPE
+        queries[Constants.QUERY_TYPE] = mealType
+        queries[Constants.QUERY_DIET] = dietType
         queries[Constants.QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[Constants.QUERY_FILL_INGREDIENTS] = "true"
         return queries

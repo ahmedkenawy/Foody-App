@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.bindingadapters
+package com.a7medkenawy.foody.adapter.bindingadapters
 
 import android.view.View
 import android.widget.ImageView
