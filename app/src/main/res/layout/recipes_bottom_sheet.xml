@@ -39,6 +39,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.chip.ChipGroup
+                android:id="@+id/mealChipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:checkedChip="@+id/main_course_chip"
@@ -179,7 +180,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/dietType_chipGroup"
+                android:id="@+id/dietChipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:checkedChip="@+id/gluten_free_chip"

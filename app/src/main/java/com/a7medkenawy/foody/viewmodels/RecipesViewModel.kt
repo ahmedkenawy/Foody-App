@@ -10,6 +10,7 @@ import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
 import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_RECIPES_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class RecipesViewModel @Inject constructor(
         mealTypeId: Int,
         dietType: String,
         dietTypeId: Int,
-    ) = viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.IO) {
         dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
     }
 
