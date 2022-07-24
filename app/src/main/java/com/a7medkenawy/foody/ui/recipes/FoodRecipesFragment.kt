@@ -66,7 +66,7 @@ class FoodRecipesFragment : Fragment() {
     private fun readFromDatabase() {
         lifecycleScope.launch {
             mainViewModel!!.readRecipes.observe(viewLifecycleOwner) {
-                if (it.isNotEmpty()&&!args.backFromBottomSheet) {
+                if (it.isNotEmpty() && !args.backFromBottomSheet) {
                     mAdapter!!.setData(it[0].foodRecipe)
                     hideShimmerRV()
                 } else {
