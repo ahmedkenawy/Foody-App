@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
-    application: Application
+    application: Application,
 ) : AndroidViewModel(application) {
 
     /** Room */
@@ -33,9 +33,27 @@ class MainViewModel @Inject constructor(
 
     /** Retrofit */
     val recipesResult: MutableLiveData<NetWorkResult<FoodRecipe>> = MutableLiveData()
+    val searchRecipesResponse: MutableLiveData<NetWorkResult<FoodRecipe>> = MutableLiveData()
 
     fun setFoodRecipe(queries: Map<String, String>) = viewModelScope.launch {
         foodRecipeSafeCall(queries)
+    }
+
+    fun searchRecipes(queries: Map<String, String>) = viewModelScope.launch {
+        searchRecipeSafeCall(queries)
+    }
+
+    private suspend fun searchRecipeSafeCall(queries: Map<String, String>) {
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.getRecipes(queries)
+                searchRecipesResponse.value = checkResponse(response)
+            } catch (ex: Exception) {
+                recipesResult.value = NetWorkResult.Error("Recipes Not Found.")
+            }
+        } else {
+            recipesResult.value = NetWorkResult.Error("No Internet Connection.")
+        }
     }
 
     private suspend fun foodRecipeSafeCall(queries: Map<String, String>) {
@@ -62,7 +80,7 @@ class MainViewModel @Inject constructor(
     private fun checkResponse(response: Response<FoodRecipe>): NetWorkResult<FoodRecipe>? {
         return when {
             response.message().toString().contains("timeout") -> {
-                    NetWorkResult.Error("Timeout")
+                NetWorkResult.Error("Timeout")
             }
             response.code() == 402 -> {
                 NetWorkResult.Error("API KEY Limited.")
