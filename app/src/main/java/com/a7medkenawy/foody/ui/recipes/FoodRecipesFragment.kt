@@ -1,6 +1,7 @@
 package com.a7medkenawy.foody.ui.recipes
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,13 +16,11 @@ import com.a7medkenawy.foody.viewmodels.MainViewModel
 import com.a7medkenawy.foody.R
 import com.a7medkenawy.foody.adapter.RecipesAdapter
 import com.a7medkenawy.foody.databinding.FragmentFoodRecipiesBinding
-import com.a7medkenawy.foody.util.Constants
-import com.a7medkenawy.foody.util.Constants.Companion.API_KEY
+import com.a7medkenawy.foody.util.NetWorkListener
 import com.a7medkenawy.foody.util.NetWorkResult
 import com.a7medkenawy.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_food_recipies.*
-import kotlinx.android.synthetic.main.fragment_food_recipies.view.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -31,6 +29,8 @@ class FoodRecipesFragment : Fragment() {
 
     private var _binding: FragmentFoodRecipiesBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var netWorkListener: NetWorkListener
 
     private val args by navArgs<FoodRecipesFragmentArgs>()
 
@@ -56,8 +56,20 @@ class FoodRecipesFragment : Fragment() {
         setUpRecyclerView()
         readFromDatabase()
 
+        netWorkListener = NetWorkListener()
+        lifecycleScope.launch {
+            netWorkListener.checkNetworkAvailability(requireActivity())
+                .collect { statue ->
+                    recipesViewModel!!.netWorkStatue=statue
+                    recipesViewModel!!.showNetworkStatue()
+                }
+        }
+
         binding.recipesFab.setOnClickListener {
-            findNavController().navigate(R.id.action_foodRecipesFragment_to_recipesBottomSheet)
+            if (recipesViewModel!!.netWorkStatue)
+                findNavController().navigate(R.id.action_foodRecipesFragment_to_recipesBottomSheet)
+            else
+                recipesViewModel!!.showNetworkStatue()
         }
 
         return binding.root
