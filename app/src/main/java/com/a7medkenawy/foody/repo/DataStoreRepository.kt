@@ -1,8 +1,9 @@
 package com.a7medkenawy.foody.repo
 
 import android.content.Context
-import androidx.datastore.DataStore
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.*
+import androidx.datastore.preferences.core.*
 import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
 import com.a7medkenawy.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.a7medkenawy.foody.util.Constants.Companion.PREFERENCES_NAME
@@ -20,26 +21,24 @@ import javax.inject.Inject
 
 
 @ActivityRetainedScoped
-class DataStoreRepository @Inject constructor(@ApplicationContext context: Context) {
+class DataStoreRepository @Inject constructor(@ApplicationContext val context: Context) {
 
     private object PreferencesKey {
-        val selectedMealType = preferencesKey<String>(SELECTED_MEAL_TYPE)
-        val selectedMealTypeId = preferencesKey<Int>(SELECTED_MEAL_TYPE_ID)
-        val selectedDietType = preferencesKey<String>(SELECTED_DIET_TYPE)
-        val selectedDietTypeId = preferencesKey<Int>(SELECTED_DIET_TYPE_ID)
+        val selectedMealType = stringPreferencesKey(SELECTED_MEAL_TYPE)
+        val selectedMealTypeId = intPreferencesKey(SELECTED_MEAL_TYPE_ID)
+        val selectedDietType = stringPreferencesKey(SELECTED_DIET_TYPE)
+        val selectedDietTypeId = intPreferencesKey(SELECTED_DIET_TYPE_ID)
     }
 
-    val dataStore: DataStore<Preferences> = context.createDataStore(
-        PREFERENCES_NAME
-    )
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
     suspend fun saveMealAndDietType(
         mealType: String,
         mealTypeId: Int,
         dietType: String,
-        dietTypeId: Int
+        dietTypeId: Int,
     ) {
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[PreferencesKey.selectedMealType] = mealType
             preferences[PreferencesKey.selectedMealTypeId] = mealTypeId
             preferences[PreferencesKey.selectedDietType] = dietType
@@ -48,7 +47,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext context: Conte
         }
     }
 
-    val readMealTypeAndDiet: Flow<MealTypeAndDiet> = dataStore.data
+    val readMealTypeAndDiet: Flow<MealTypeAndDiet> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -73,6 +72,6 @@ class DataStoreRepository @Inject constructor(@ApplicationContext context: Conte
         val selectedMealType: String,
         val selectedMealTypeId: Int,
         val selectedDietType: String,
-        val selectedDietTypeId: Int
+        val selectedDietTypeId: Int,
     )
 }

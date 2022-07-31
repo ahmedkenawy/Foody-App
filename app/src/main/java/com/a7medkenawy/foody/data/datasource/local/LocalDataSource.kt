@@ -7,7 +7,7 @@ import javax.inject.Inject
 class LocalDataSource @Inject constructor(
     private val database: RecipesDatabase
 ){
-    suspend fun insertRecipes(recipesEntity: RecipesEntity){
+     suspend fun insertRecipes(recipesEntity: RecipesEntity){
         database.recipeDao().insertRecipes(recipesEntity)
     }
 

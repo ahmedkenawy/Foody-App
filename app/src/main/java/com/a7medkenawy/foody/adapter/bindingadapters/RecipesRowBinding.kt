@@ -3,14 +3,28 @@ package com.a7medkenawy.foody.adapter.bindingadapters
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import coil.load
 import com.a7medkenawy.foody.R
+import com.a7medkenawy.foody.models.Result
+import com.a7medkenawy.foody.ui.recipes.FoodRecipesFragmentDirections
 
 class RecipesRowBinding {
 
     companion object {
+
+        @BindingAdapter("sendDataToDetailsActivity")
+        @JvmStatic
+        fun sendDataToDetailsActivity(constraintLayout: ConstraintLayout, result: Result) {
+            constraintLayout.setOnClickListener {
+                val action =
+                    FoodRecipesFragmentDirections.actionFoodRecipesFragmentToDetailsActivity(result)
+                constraintLayout.findNavController().navigate(action)
+            }
+        }
 
         @BindingAdapter("loadImageFromUrl")
         @JvmStatic
