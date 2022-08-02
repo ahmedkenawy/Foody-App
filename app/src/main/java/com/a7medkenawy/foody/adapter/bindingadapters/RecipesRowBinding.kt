@@ -1,8 +1,10 @@
 package com.a7medkenawy.foody.adapter.bindingadapters
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -11,6 +13,7 @@ import coil.load
 import com.a7medkenawy.foody.R
 import com.a7medkenawy.foody.models.Result
 import com.a7medkenawy.foody.ui.recipes.FoodRecipesFragmentDirections
+import org.jsoup.Jsoup
 
 class RecipesRowBinding {
 
@@ -20,9 +23,16 @@ class RecipesRowBinding {
         @JvmStatic
         fun sendDataToDetailsActivity(constraintLayout: ConstraintLayout, result: Result) {
             constraintLayout.setOnClickListener {
-                val action =
-                    FoodRecipesFragmentDirections.actionFoodRecipesFragmentToDetailsActivity(result)
-                constraintLayout.findNavController().navigate(action)
+                try {
+
+                    val action =
+                        FoodRecipesFragmentDirections.actionFoodRecipesFragmentToDetailsActivity(
+                            result)
+                    constraintLayout.findNavController().navigate(action)
+                } catch (ex: Exception) {
+                    Log.d("ERROR", ex.message.toString())
+
+                }
             }
         }
 
@@ -67,5 +77,12 @@ class RecipesRowBinding {
             }
         }
 
+        @BindingAdapter("parseHtml")
+        @JvmStatic
+        fun parseHtml(textView: TextView, description: String) {
+            val desc = Jsoup.parse(description).text()
+            textView.text = desc
+
+        }
     }
 }
