@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.ui
+package com.a7medkenawy.foody.ui.activities
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,7 +7,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
 import com.a7medkenawy.foody.R
-import com.a7medkenawy.foody.adapter.PagerAdapter
+import com.a7medkenawy.foody.adapter.pageradapter.PagerAdapter
+import com.a7medkenawy.foody.ui.fragments.detailsfragments.ingredients.IngredientsFragment
+import com.a7medkenawy.foody.ui.fragments.detailsfragments.instructions.InstructionsFragment
+import com.a7medkenawy.foody.ui.fragments.detailsfragments.overview.OverViewFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_details.*
 

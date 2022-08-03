@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.adapter
+package com.a7medkenawy.foody.adapter.pageradapter
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

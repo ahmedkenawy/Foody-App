@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -12,7 +11,7 @@ import androidx.navigation.findNavController
 import coil.load
 import com.a7medkenawy.foody.R
 import com.a7medkenawy.foody.models.Result
-import com.a7medkenawy.foody.ui.recipes.FoodRecipesFragmentDirections
+import com.a7medkenawy.foody.ui.fragments.mainactivityfragments.recipes.FoodRecipesFragmentDirections
 import org.jsoup.Jsoup
 
 class RecipesRowBinding {

@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.adapter
+package com.a7medkenawy.foody.adapter.recipesadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

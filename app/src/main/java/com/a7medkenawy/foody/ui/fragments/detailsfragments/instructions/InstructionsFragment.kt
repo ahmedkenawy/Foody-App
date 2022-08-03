@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.ui
+package com.a7medkenawy.foody.ui.fragments.detailsfragments.instructions
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,14 +8,15 @@ import android.view.ViewGroup
 import com.a7medkenawy.foody.R
 
 
-class IngredientsFragment : Fragment() {
+class InstructionsFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ingredients, container, false)
+        return inflater.inflate(R.layout.fragment_instructions, container, false)
     }
 
 }

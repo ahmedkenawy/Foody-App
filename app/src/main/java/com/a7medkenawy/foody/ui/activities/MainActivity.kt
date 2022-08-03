@@ -1,4 +1,4 @@
-package com.a7medkenawy.foody.ui
+package com.a7medkenawy.foody.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -3,7 +3,7 @@ package com.a7medkenawy.foody.util
 import androidx.recyclerview.widget.DiffUtil
 import com.a7medkenawy.foody.models.Result
 
-class RecipesDiffUtil(var oldList: List<Result>, var newList: List<Result>) : DiffUtil.Callback() {
+class RecipesDiffUtil<T>(var oldList: List<T>, var newList: List<T>) : DiffUtil.Callback() {
     override fun getOldListSize() = oldList.size
 
     override fun getNewListSize() = newList.size

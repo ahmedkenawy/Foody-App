@@ -15,13 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foody">
         <activity
-            android:name=".ui.DetailsActivity"
+            android:name=".ui.activities.DetailsActivity"
             android:exported="false"
             android:theme="@style/DetailsActivity"
             android:label="Details"
             />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

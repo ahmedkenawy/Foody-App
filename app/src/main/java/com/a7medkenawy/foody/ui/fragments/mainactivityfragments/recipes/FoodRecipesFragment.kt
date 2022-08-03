@@ -1,8 +1,7 @@
-package com.a7medkenawy.foody.ui.recipes
+package com.a7medkenawy.foody.ui.fragments.mainactivityfragments.recipes
 
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -10,16 +9,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Query
 import com.a7medkenawy.foody.viewmodels.MainViewModel
 import com.a7medkenawy.foody.R
-import com.a7medkenawy.foody.adapter.RecipesAdapter
+import com.a7medkenawy.foody.adapter.recipesadapter.RecipesAdapter
 import com.a7medkenawy.foody.databinding.FragmentFoodRecipiesBinding
 import com.a7medkenawy.foody.util.NetWorkListener
 import com.a7medkenawy.foody.util.NetWorkResult
 import com.a7medkenawy.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
